@@ -1,0 +1,41 @@
+{
+  "name": "aiwebcrafter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_OPTIONS='--no-deprecation' tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs --log-override:import-meta=silent",
+    "start": "NODE_OPTIONS='--no-deprecation' node dist/server.cjs",
+    "vercel-build": "vite build"
+  },
+  "dependencies": {
+    "@google/genai": "^1.29.0",
+    "@supabase/supabase-js": "^2.112.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "jszip": "^3.10.1",
+    "lucide-react": "^1.31.0",
+    "nodemailer": "^9.0.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/express-rate-limit": "^6.0.2",
+    "@types/node": "^22.14.0",
+    "@types/nodemailer": "^8.0.1",
+    "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.12",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "^0.28.2",
+    "@rollup/rollup-linux-arm64-gnu": "^4.34.8",
+    "@rollup/rollup-linux-arm64-musl": "^4.34.8",
+    "@rollup/rollup-linux-x64-gnu": "^4.34.8",
+    "@rollup/rollup-linux-x64-musl": "^4.34.8"
+  }
+}

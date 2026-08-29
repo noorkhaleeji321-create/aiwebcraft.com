@@ -1,0 +1,6 @@
+{
+  "name": "AIWebCrafter - Digital Marketplace",
+  "description": "Premium buyer-focused marketplace for vetted SaaS platforms, Shopify stores, AI tools, and turnkey digital businesses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
