@@ -17,6 +17,12 @@ const PORT = process.env.PORT || 3000;
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 
+// Handle Google Search Console verification HTML file requests
+app.get('/google:id.html', (req: Request, res: Response) => {
+  const filename = `google${req.params.id}.html`;
+  res.type('html').send(`google-site-verification: ${filename}`);
+});
+
 // Check if a string is a plausible Google Gemini API key
 function isValidGeminiApiKey(k: string): boolean {
   if (!k || typeof k !== 'string') return false;
