@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://aiwebcrafter.com</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/blog</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/blog?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/blog?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/about</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/about?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/about?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/contact</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/contact?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/contact?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/privacy</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/privacy?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/privacy?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/terms</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/terms?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/terms?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026?lang=ar" />
+  </url>
+</urlset>
