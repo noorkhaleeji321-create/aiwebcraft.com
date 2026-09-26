@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://aiwebcrafter.com</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com?lang=en" />
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://aiwebcrafter.com/blog</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/blog?lang=en" />
@@ -18,58 +18,77 @@
   </url>
   <url>
     <loc>https://aiwebcrafter.com/about</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/about?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/about?lang=ar" />
   </url>
   <url>
     <loc>https://aiwebcrafter.com/contact</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/contact?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/contact?lang=ar" />
   </url>
   <url>
     <loc>https://aiwebcrafter.com/privacy</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/privacy?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/privacy?lang=ar" />
   </url>
   <url>
     <loc>https://aiwebcrafter.com/terms</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/terms?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/terms?lang=ar" />
   </url>
+  <!-- 8 Glute Hypertrophy & Nutrition Pillar Articles -->
   <url>
-    <loc>https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini</loc>
-    <lastmod>2026-09-22</lastmod>
+    <loc>https://aiwebcrafter.com/article/natural-glute-growth-scientific-nutrition-training-guide</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/production-rag-supabase-vector-gemini?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/natural-glute-growth-scientific-nutrition-training-guide?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/natural-glute-growth-scientific-nutrition-training-guide?lang=en" />
   </url>
   <url>
-    <loc>https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind</loc>
-    <lastmod>2026-09-19</lastmod>
+    <loc>https://aiwebcrafter.com/article/glute-anatomy-biomechanics-muscle-growth-guide</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/modern-saas-stack-nextjs-supabase-tailwind?lang=ar" />
   </url>
   <url>
-    <loc>https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026</loc>
-    <lastmod>2026-09-14</lastmod>
+    <loc>https://aiwebcrafter.com/article/nutrition-glute-growth-caloric-surplus-protein-meal-plans</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://aiwebcrafter.com/article/top-ai-developer-tools-web-engineering-2026?lang=ar" />
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/mastering-barbell-hip-thrust-form-cues-safety</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/progressive-overload-lower-body-hypertrophy-science</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/best-home-glute-workouts-resistance-bands-bodyweight</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/muscle-recovery-sleep-quality-glute-growth-science</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aiwebcrafter.com/article/complete-4-day-glutes-legs-workout-routine-schedule</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
