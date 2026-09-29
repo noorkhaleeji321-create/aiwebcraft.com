@@ -1,0 +1,6 @@
+{
+  "name": "AIWebCrafter",
+  "description": "SEO-focused educational blog and knowledge hub for AI, web development, SaaS, and AI tools with Arabic and English bilingual support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

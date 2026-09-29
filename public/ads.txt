@@ -1,0 +1,2 @@
+# Google AdSense ads.txt
+google.com, pub-6939607209654934, DIRECT, f08c47fec0942fa0
