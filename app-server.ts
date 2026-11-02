@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import { gitStorage } from './backend/services/gitStorageService.js';
+import { gitStorage } from './backend/services/gitStorageService';
 
 dotenv.config({ override: true });
 
@@ -21,7 +21,7 @@ import {
   getSigningSecret,
   isProductionMode,
   SESSION_TTL_SECONDS
-} from './backend/services/authService.js';
+} from './backend/services/authService';
 
 export function createApp() {
   const app = express();
@@ -427,12 +427,59 @@ export function createApp() {
   });
 
   // --------------------------------------------------------------------------
-  // STOREFRONT V1 COMPATIBILITY (Aliased for specific user request)
+  // STOREFRONT V1 COMPATIBILITY (Aliased for natural-health-morocco)
   // --------------------------------------------------------------------------
+  app.get('/api/v1/ping', async (req: Request, res: Response) => {
+    const key = (req.headers['x-awc-storefront-key'] as string) || (req.query.key as string);
+    const configuredKey = process.env.AWC_STOREFRONT_KEY;
+    const isKeyValid = Boolean(configuredKey && key === configuredKey);
+    const { products } = await gitStorage.getProducts();
+    return res.json({
+      success: true,
+      status: 'online',
+      platform: 'AIWebCrafter Cloud Platform',
+      store: 'Natural Health Morocco',
+      key_authenticated: isKeyValid,
+      products_count: products.length,
+      timestamp: new Date().toISOString()
+    });
+  });
+
   app.get('/api/v1/products', async (_req: Request, res: Response) => {
     try {
       const { products } = await gitStorage.getProducts();
       return res.json({ success: true, data: products });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
+  app.get('/api/v1/categories', async (_req: Request, res: Response) => {
+    try {
+      const catPath = path.resolve(process.cwd(), 'data', 'categories.json');
+      const categories = fs.existsSync(catPath) ? JSON.parse(fs.readFileSync(catPath, 'utf8')) : [];
+      return res.json({ success: true, data: categories });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
+  app.get('/api/v1/bootstrap', async (_req: Request, res: Response) => {
+    try {
+      const { products } = await gitStorage.getProducts();
+      const catPath = path.resolve(process.cwd(), 'data', 'categories.json');
+      const categories = fs.existsSync(catPath) ? JSON.parse(fs.readFileSync(catPath, 'utf8')) : [];
+      return res.json({
+        success: true,
+        data: {
+          products,
+          categories,
+          storeSettings: {
+            store_name: "Natural Health Morocco",
+            currency: "MAD"
+          }
+        }
+      });
     } catch (err: any) {
       return res.status(500).json({ success: false, error: err.message });
     }
