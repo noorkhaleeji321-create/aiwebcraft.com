@@ -485,6 +485,15 @@ export function createApp() {
     }
   });
 
+  app.get('/api/v1/orders', async (_req: Request, res: Response) => {
+    try {
+      const orders = await gitStorage.getOrders();
+      return res.json({ success: true, count: orders.length, data: orders });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
   app.post('/api/v1/orders', async (req: Request, res: Response) => {
     try {
       const idempotencyKey = (req.headers['x-idempotency-key'] as string) || req.body.idempotency_key;
@@ -495,6 +504,15 @@ export function createApp() {
       return res.status(result.is_duplicate ? 200 : 201).json(result);
     } catch (err: any) {
       return res.status(400).json({ success: false, error: err.message });
+    }
+  });
+
+  app.get('/api/orders', async (_req: Request, res: Response) => {
+    try {
+      const orders = await gitStorage.getOrders();
+      return res.json({ success: true, count: orders.length, data: orders });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, error: err.message });
     }
   });
 
