@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "tsx app-server.ts",
-    "build": "vite build",
+    "build": "vite build && esbuild app-server.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/server.js --external:express --external:compression --external:dotenv --external:sql.js --external:jszip --external:vite",
+    "vercel-build": "npm run build",
     "start": "tsx app-server.ts",
     "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
+    "clean": "rm -rf dist server.js api/server.js",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
