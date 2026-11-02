@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Moroccan Artisanal Crafts",
+    "name_ar": "الصناعة التقليدية المغربية",
+    "slug": "moroccan-artisanal-crafts",
+    "parent_id": null,
+    "description": "Authentic handmade pottery, ceramics, lanterns, and brass decor from Fez and Marrakech.",
+    "icon": "Sparkles",
+    "sort_order": 1
+  },
+  {
+    "id": 2,
+    "name": "Organic Argan & Cosmetics",
+    "name_ar": "زيت الأركان العضوي ومستحضرات التجميل",
+    "slug": "organic-argan-cosmetics",
+    "parent_id": null,
+    "description": "Pure cold-pressed bio-certified cosmetic argan oil, black soap, and ghassoul clay.",
+    "icon": "Droplets",
+    "sort_order": 2
+  },
+  {
+    "id": 3,
+    "name": "Handmade Leather Goods",
+    "name_ar": "المنتجات الجلدية الطبيعية",
+    "slug": "handmade-leather-goods",
+    "parent_id": null,
+    "description": "Full-grain goat and cow leather bags, babouches slippers, and travel goods crafted in Chouara tanneries.",
+    "icon": "Briefcase",
+    "sort_order": 3
+  },
+  {
+    "id": 4,
+    "name": "Electronics & Smart Gadgets",
+    "name_ar": "الإلكترونيات والأجهزة الذكية",
+    "slug": "electronics-smart-gadgets",
+    "parent_id": null,
+    "description": "Smart wearables, wireless audio, charging docks, and tech accessories.",
+    "icon": "Cpu",
+    "sort_order": 4
+  },
+  {
+    "id": 5,
+    "name": "Home & Modern Living",
+    "name_ar": "المنزل والديكور العصري",
+    "slug": "home-modern-living",
+    "parent_id": null,
+    "description": "Beni Ourain style rugs, artisanal cushions, tea sets, and ambient lighting.",
+    "icon": "Home",
+    "sort_order": 5
+  },
+  {
+    "id": 6,
+    "name": "Gourmet Spices & Culinary",
+    "name_ar": "التوابل والمنتجات الغذائية الفاخرة",
+    "slug": "gourmet-spices-culinary",
+    "parent_id": null,
+    "description": "Taliouine pure saffron, Ras El Hanout royal spice blend, and orange blossom water.",
+    "icon": "Utensils",
+    "sort_order": 6
+  }
+]

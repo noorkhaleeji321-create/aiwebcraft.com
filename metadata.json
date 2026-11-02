@@ -1,0 +1,6 @@
+{
+  "name": "AIWebCrafter Platform",
+  "description": "Private cloud database, encrypted storage, and secure API infrastructure platform dedicated to e-commerce store operations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
