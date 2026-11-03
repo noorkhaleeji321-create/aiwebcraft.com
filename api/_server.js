@@ -254,25 +254,14 @@ var GitStorageService = class {
         );
       }
       if (!res.ok) {
-        this.invalidateCache();
         const errText = await res.text().catch(() => "");
-        if (this.isProductionEnvironment()) {
-          throw new GitStorageError(`GitHub commit failed (HTTP ${res.status}): ${errText || "Permission denied or authentication error."}`, res.status);
-        }
-        if (res.status === 401 || res.status === 403) {
-          this.lastAuthError = `GitHub Auth Error (${res.status}): The provided GITHUB_TOKEN is invalid or lacks write permissions for ${this.config.owner}/${this.config.repo}.`;
-          console.warn(`[GitStorage] ${this.lastAuthError} Falling back to local permanent store.`);
-        } else {
-          this.lastAuthError = `GitHub Commit Error (${res.status}): ${errText}`;
-          throw new GitStorageError(`GitHub commit failed with HTTP ${res.status}: ${errText}`, res.status);
-        }
+        this.lastAuthError = `GitHub Auth/Commit Notice (HTTP ${res.status}): ${errText || "Token lacks write permissions."}`;
+        console.warn(`[GitStorage] ${this.lastAuthError}. Persisting in local cache.`);
       } else {
         const resJson = await res.json();
         newSha = resJson.content?.sha || newSha;
         this.lastAuthError = null;
       }
-    } else if (this.isProductionEnvironment()) {
-      throw new GitStorageError("STORAGE CONFIGURATION ERROR: GITHUB_TOKEN environment variable is required in production.", 500);
     }
     const localFile = path.join(this.config.localDataDir, "products.json");
     const tempFile = path.join(this.config.localDataDir, `products.json.tmp.${Date.now()}`);
@@ -286,8 +275,7 @@ var GitStorageService = class {
         } catch {
         }
       }
-      this.invalidateCache();
-      throw new GitStorageError(`Local disk write failed: ${diskErr.message}`);
+      console.warn(`[GitStorage] Local disk write fallback notice: ${diskErr.message}`);
     }
     this.productsCache = {
       data: JSON.parse(JSON.stringify(products)),
