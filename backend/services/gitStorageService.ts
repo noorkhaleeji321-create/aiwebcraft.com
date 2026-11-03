@@ -195,8 +195,8 @@ export class GitStorageService {
   constructor(customConfig?: Partial<GitStorageConfig>) {
     this.config = {
       owner: process.env.GITHUB_REPO_OWNER || 'noorkhaleeji321-create',
-      repo: process.env.GITHUB_REPO_NAME || 'natural-health-morocco',
-      branch: process.env.GITHUB_BRANCH || 'main',
+      repo: process.env.GITHUB_REPO_NAME || 'aiwebcraft.com',
+      branch: process.env.GITHUB_BRANCH || 'master',
       token: process.env.GITHUB_TOKEN, // Kept strictly on server side!
       localDataDir: path.resolve(process.cwd(), 'data'),
       maxRetries: 3,
