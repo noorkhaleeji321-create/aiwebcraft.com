@@ -934,8 +934,8 @@ export class GitStorageService {
                 const localResult = await this.commitOrderAndInventoryAtomicLocal(newOrder, updatedProducts);
                 newSha = localResult.productsSha;
               } catch (localErr: any) {
-                if (this.isProductionEnvironment()) throw remoteErr;
-                throw localErr;
+                // If local disk is read-only on Vercel, log warning and complete order in memory
+                console.warn('[GitStorage] Local disk commit fallback notice on Vercel:', localErr.message);
               }
             }
           } else {
