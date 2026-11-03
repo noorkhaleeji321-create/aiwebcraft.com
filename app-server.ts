@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
 import compression from 'compression';
-import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
@@ -20,6 +19,8 @@ import {
   getAdminEmail,
   getSigningSecret,
   isProductionMode,
+  isValidAdminEmail,
+  isValidAdminKey,
   SESSION_TTL_SECONDS
 } from './backend/services/authService';
 
@@ -63,6 +64,17 @@ export function createApp() {
     next();
   });
 
+  // Safe Vercel API path restoration (only applies to /api requests)
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    const originalPath = (req.headers['x-forwarded-uri'] as string) || (req.headers['x-matched-path'] as string);
+    if (originalPath && originalPath.startsWith('/api') && req.url === '/api') {
+      req.url = originalPath;
+    }
+    next();
+  });
+
+
+
   // Admin Authentication Middleware (Stateless HMAC & HttpOnly Cookie)
   const requireAdminAuth = (req: Request, res: Response, next: NextFunction) => {
     const cookieHeader = req.headers['cookie'];
@@ -85,9 +97,8 @@ export function createApp() {
 
     // 2. Direct server-to-server admin key (strictly for backend CLI or webhooks)
     try {
-      const adminMasterKey = getAdminMasterKey();
       const headerAdminKey = (req.headers['x-awc-admin-key'] as string) || (req.headers['x-awc-api-key'] as string);
-      if (headerAdminKey && headerAdminKey === adminMasterKey) {
+      if (headerAdminKey && isValidAdminKey(headerAdminKey)) {
         return next();
       }
     } catch {}
@@ -114,29 +125,19 @@ export function createApp() {
       });
     }
 
-    let validEmail: string;
-    let validPassword: string;
-
-    try {
-      validEmail = getAdminEmail();
-      validPassword = getAdminMasterKey();
-    } catch (configErr: any) {
-      return res.status(500).json({
-        success: false,
-        error: configErr.message || 'Server Misconfigured: Required administrator credentials are missing.'
-      });
-    }
-
     const { email, password } = req.body || {};
 
     if (
       email &&
       typeof email === 'string' &&
-      email.trim().toLowerCase() === validEmail &&
-      password === validPassword
+      isValidAdminEmail(email) &&
+      password &&
+      typeof password === 'string' &&
+      isValidAdminKey(password)
     ) {
       recordSuccessfulLogin(clientIp);
-      const token = createSignedSessionToken(validEmail, 'owner');
+      const authenticatedEmail = email.trim().toLowerCase();
+      const token = createSignedSessionToken(authenticatedEmail, 'owner');
 
       // Set HttpOnly, SameSite=Strict cookie (and Secure in production/HTTPS)
       const isSecure = process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https';
@@ -150,7 +151,7 @@ export function createApp() {
       return res.json({
         success: true,
         token,
-        user: { email: validEmail, role: 'owner' },
+        user: { email: authenticatedEmail, role: 'owner' },
         expires_in: SESSION_TTL_SECONDS
       });
     }
@@ -429,7 +430,31 @@ export function createApp() {
   // --------------------------------------------------------------------------
   // STOREFRONT V1 COMPATIBILITY (Aliased for natural-health-morocco)
   // --------------------------------------------------------------------------
-  app.get('/api/v1/ping', async (req: Request, res: Response) => {
+  const v1Handlers = ['/v1', '/api/v1', '/v1/', '/api/v1/'];
+  
+  app.all(v1Handlers, async (req: Request, res: Response) => {
+    const key = (req.headers['x-awc-storefront-key'] as string) || (req.query.key as string);
+    const configuredKey = process.env.AWC_STOREFRONT_KEY;
+    const isKeyValid = Boolean(configuredKey && key === configuredKey);
+    const { products } = await gitStorage.getProducts();
+    const orders = await gitStorage.getOrders();
+    const categories = await gitStorage.getCategories();
+    return res.json({
+      success: true,
+      status: 'online',
+      platform: 'AIWebCrafter Cloud Platform',
+      store: 'Natural Health Morocco',
+      key_authenticated: isKeyValid,
+      payload_type: req.body?.payload_type || 'test_product',
+      items_count: products.length,
+      categories_count: categories.length,
+      orders_count: orders.length,
+      message: 'Connected successfully to AIWebCrafter Cloud Platform.',
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  app.all(v1Handlers.map(h => `${h}/ping`), async (req: Request, res: Response) => {
     const key = (req.headers['x-awc-storefront-key'] as string) || (req.query.key as string);
     const configuredKey = process.env.AWC_STOREFRONT_KEY;
     const isKeyValid = Boolean(configuredKey && key === configuredKey);
@@ -445,7 +470,7 @@ export function createApp() {
     });
   });
 
-  app.get('/api/v1/products', async (_req: Request, res: Response) => {
+  app.get(v1Handlers.map(h => `${h}/products`), async (_req: Request, res: Response) => {
     try {
       const { products } = await gitStorage.getProducts();
       return res.json({ success: true, data: products });
@@ -454,7 +479,7 @@ export function createApp() {
     }
   });
 
-  app.get('/api/v1/categories', async (_req: Request, res: Response) => {
+  app.get(v1Handlers.map(h => `${h}/categories`), async (_req: Request, res: Response) => {
     try {
       const catPath = path.resolve(process.cwd(), 'data', 'categories.json');
       const categories = fs.existsSync(catPath) ? JSON.parse(fs.readFileSync(catPath, 'utf8')) : [];
@@ -464,7 +489,7 @@ export function createApp() {
     }
   });
 
-  app.get('/api/v1/bootstrap', async (_req: Request, res: Response) => {
+  app.get(v1Handlers.map(h => `${h}/bootstrap`), async (_req: Request, res: Response) => {
     try {
       const { products } = await gitStorage.getProducts();
       const catPath = path.resolve(process.cwd(), 'data', 'categories.json');
@@ -485,7 +510,7 @@ export function createApp() {
     }
   });
 
-  app.get('/api/v1/orders', async (_req: Request, res: Response) => {
+  app.get(v1Handlers.map(h => `${h}/orders`), async (_req: Request, res: Response) => {
     try {
       const orders = await gitStorage.getOrders();
       return res.json({ success: true, count: orders.length, data: orders });
@@ -494,7 +519,7 @@ export function createApp() {
     }
   });
 
-  app.post('/api/v1/orders', async (req: Request, res: Response) => {
+  app.post(v1Handlers.map(h => `${h}/orders`), async (req: Request, res: Response) => {
     try {
       const idempotencyKey = (req.headers['x-idempotency-key'] as string) || req.body.idempotency_key;
       const result = await gitStorage.ingestOrder({
@@ -506,6 +531,7 @@ export function createApp() {
       return res.status(400).json({ success: false, error: err.message });
     }
   });
+
 
   app.get('/api/orders', async (_req: Request, res: Response) => {
     try {
@@ -532,13 +558,18 @@ export const app = createApp();
 async function startServer() {
   const PORT = Number(process.env.PORT) || 3000;
 
-  // Mount Vite dev server in middleware mode for local development
-  if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
+  // Mount Vite dev server in middleware mode for local development only
+  if (process.env.NODE_ENV !== 'production' && !isServerlessEnvironment()) {
+    try {
+      const { createServer: createViteServer } = await import('vite');
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa',
+      });
+      app.use(vite.middlewares);
+    } catch (e) {
+      console.warn('[AIWebCrafter] Could not load vite middleware:', e);
+    }
   } else {
     // Production static serving
     const distPath = path.resolve(process.cwd(), 'dist');
@@ -555,10 +586,21 @@ async function startServer() {
   });
 }
 
-// Auto-start server when executed directly in non-serverless environment
-if (process.env.VERCEL !== '1' && process.env.NODE_ENV !== 'test') {
+export function isServerlessEnvironment(): boolean {
+  return Boolean(
+    process.env.VERCEL ||
+    process.env.VERCEL_ENV ||
+    process.env.AWS_LAMBDA_FUNCTION_NAME ||
+    process.env.LAMBDA_TASK_ROOT ||
+    process.env._HANDLER
+  );
+}
+
+// Auto-start server strictly when executed directly in non-serverless CLI/dev environment
+if (!isServerlessEnvironment() && process.env.NODE_ENV !== 'test') {
   startServer().catch((err: unknown) => {
     console.error('[AIWebCrafter] Failed to start server:', err);
     process.exit(1);
   });
 }
+

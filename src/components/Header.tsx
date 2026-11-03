@@ -47,6 +47,8 @@ export const Header: React.FC<HeaderProps> = ({
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
           <span>Zero-Cost MAD Guaranteed</span>
         </span>
+
+
       </div>
 
       {/* Zone 3: Actions, Language Switch & Owner Profile */}

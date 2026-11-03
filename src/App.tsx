@@ -32,7 +32,7 @@ import { getPermanentStorageProducts, getPermanentStorageOrders, getPermanentSto
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('aiwebcrafter_authenticated') === 'true';
+    return localStorage.getItem('aiwebcrafter_authenticated') === 'true' && Boolean(localStorage.getItem('aiwebcrafter_admin_token'));
   });
   const [lang, setLang] = useState<Language>('en');
   const [currentSection, setCurrentSection] = useState<SectionKey>('overview');

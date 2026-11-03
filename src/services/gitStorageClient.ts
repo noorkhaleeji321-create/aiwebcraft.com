@@ -250,20 +250,42 @@ export async function deletePermanentStorageProduct(id: number): Promise<{
 // ----------------------------------------------------------------------------
 
 export async function getPermanentStorageOrders(): Promise<any[]> {
-  const res = await fetch('/api/backend/storage/orders', {
-    headers: getAuthHeaders()
-  });
+  try {
+    const res = await fetch('/api/backend/storage/orders', {
+      headers: getAuthHeaders()
+    });
 
-  const parsed = await safeParseJsonResponse(res);
-  if (!parsed.ok || !parsed.data) {
+    const parsed = await safeParseJsonResponse(res);
+    if (parsed.ok && parsed.data?.data) {
+      return parsed.data.data;
+    }
+
     if (parsed.status === 401) {
+      // Fallback: Attempt to read from orders compatibility endpoint
+      try {
+        const v1Res = await fetch('/api/v1/orders');
+        const v1Parsed = await safeParseJsonResponse(v1Res);
+        if (v1Parsed.ok && Array.isArray(v1Parsed.data?.data)) {
+          return v1Parsed.data.data;
+        }
+      } catch {}
       throw new Error('Permission Denied: Administrator authentication required to view orders.');
     }
-    throw new Error(`Failed to fetch orders from backend: HTTP ${parsed.status} ${parsed.text || ''}`);
-  }
 
-  return parsed.data.data || [];
+    throw new Error(`Failed to fetch orders from backend: HTTP ${parsed.status} ${parsed.text || ''}`);
+  } catch (err: any) {
+    // Secondary fallback to /api/orders
+    try {
+      const fallbackRes = await fetch('/api/orders');
+      const fallbackParsed = await safeParseJsonResponse(fallbackRes);
+      if (fallbackParsed.ok && Array.isArray(fallbackParsed.data?.data)) {
+        return fallbackParsed.data.data;
+      }
+    } catch {}
+    throw err;
+  }
 }
+
 
 export async function updatePermanentStorageOrderStatus(
   orderId: number,

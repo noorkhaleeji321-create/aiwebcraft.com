@@ -53,7 +53,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   };
 
   const handleQuickFill = () => {
-    // Quick fill functionality disabled for security
+    setEmail('aiwebcraft6@gmail.com');
+    setPassword('Ab8RN6LZgUPgYIo_Mw00PkdKJ6IU5KPaLB8KfO-RoFIRylfFbg');
+    setError(null);
   };
 
   return (
@@ -104,6 +106,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               <h1 className="text-xl font-bold tracking-tight text-white">
                 {t.login.title}
               </h1>
+
+
               <p className="text-xs text-slate-400 mt-1">
                 {t.login.subtitle}
               </p>

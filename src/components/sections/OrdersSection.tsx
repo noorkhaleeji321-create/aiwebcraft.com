@@ -237,7 +237,7 @@ export const OrdersSection: React.FC<OrdersSectionProps> = ({
 
       {/* Network / Permission / Storage Error Alert */}
       {fetchError && (
-        <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-800/60 text-rose-300 flex items-center justify-between gap-3 text-xs">
+        <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-800/60 text-rose-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
             <div>
@@ -245,13 +245,26 @@ export const OrdersSection: React.FC<OrdersSectionProps> = ({
               <div className="text-rose-300/90 text-[11px] mt-0.5">{fetchError}</div>
             </div>
           </div>
-          <button
-            onClick={fetchBackendOrders}
-            className="px-3 py-1.5 bg-rose-900/60 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shrink-0 cursor-pointer"
-          >
-            <RefreshCw className="w-3 h-3" />
-            <span>Retry (إعادة المحاولة)</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {fetchError.toLowerCase().includes('permission') || fetchError.toLowerCase().includes('authentication') ? (
+              <button
+                onClick={() => {
+                  localStorage.removeItem('aiwebcrafter_authenticated');
+                  window.location.reload();
+                }}
+                className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <span>{lang === 'ar' ? 'تسجيل الدخول لتجديد الجلسة' : 'Log In (Refresh Session)'}</span>
+              </button>
+            ) : null}
+            <button
+              onClick={fetchBackendOrders}
+              className="px-3 py-1.5 bg-rose-900/60 hover:bg-rose-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            >
+              <RefreshCw className="w-3 h-3" />
+              <span>{lang === 'ar' ? 'إعادة المحاولة' : 'Retry'}</span>
+            </button>
+          </div>
         </div>
       )}
 

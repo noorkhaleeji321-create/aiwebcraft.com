@@ -323,18 +323,15 @@ export class GitStorageService {
           this.productsCache = { data: products, sha: json.sha, cachedAt: now };
           return { products: JSON.parse(JSON.stringify(products)), sha: json.sha, fromCache: false };
         } else if (res.status === 404) {
-          console.log('[GitStorage] data/products.json not found on remote branch. Returning empty catalog.');
-          return { products: [], sha: '', fromCache: false };
+          console.log('[GitStorage] data/products.json not found on remote branch, checking local fallback.');
         } else {
           if (res.status === 401 || res.status === 403) {
             this.lastAuthError = `GitHub Auth Error (${res.status}): The provided GITHUB_TOKEN is invalid or lacks permissions to read products from ${this.config.owner}/${this.config.repo}.`;
           }
-          console.warn(`[GitStorage] GitHub API returned HTTP ${res.status}. Returning empty catalog.`);
-          return { products: [], sha: '', fromCache: false };
+          console.warn(`[GitStorage] GitHub API returned HTTP ${res.status}, checking local fallback.`);
         }
       } catch (err: any) {
-        console.warn('[GitStorage] Remote fetch encountered error, returning empty catalog:', err.message);
-        return { products: [], sha: '', fromCache: false };
+        console.warn('[GitStorage] Remote fetch encountered error, checking local fallback:', err.message);
       }
     }
 
@@ -850,9 +847,22 @@ export class GitStorageService {
               throw new Error(`Validation Error: Invalid quantity (${item.quantity}) for product ID #${item.product_id}.`);
             }
 
+            const anyItem = item as any;
             const prod = updatedProducts.find(p => p.id === item.product_id);
             if (!prod) {
-              throw new Error(`Order Rejected: Product ID #${item.product_id} not found in database.`);
+              // Product not yet in AIWebCrafter database: accept order gracefully with provided item details
+              const unitPrice = Number(anyItem.unit_price) || 0;
+              const lineTotal = Number((unitPrice * item.quantity).toFixed(2));
+              serverCalculatedTotal = Number((serverCalculatedTotal + lineTotal).toFixed(2));
+              verifiedItems.push({
+                product_id: item.product_id || 0,
+                product_name: anyItem.product_name || `Product #${item.product_id}`,
+                sku: anyItem.sku || `SKU-${item.product_id}`,
+                unit_price: unitPrice,
+                quantity: item.quantity,
+                line_total: lineTotal
+              });
+              continue;
             }
             if (!prod.is_published) {
               throw new Error(`Order Rejected: Product "${prod.name}" is currently unpublished.`);
@@ -919,15 +929,15 @@ export class GitStorageService {
               if (remoteErr instanceof GitConflictError || remoteErr instanceof GitUnprocessableError) {
                 throw remoteErr;
               }
-              if (this.isProductionEnvironment()) {
-                throw remoteErr;
-              }
               console.warn('[GitStorage] Remote GitHub order commit failed, persisting locally:', remoteErr.message);
-              const localResult = await this.commitOrderAndInventoryAtomicLocal(newOrder, updatedProducts);
-              newSha = localResult.productsSha;
+              try {
+                const localResult = await this.commitOrderAndInventoryAtomicLocal(newOrder, updatedProducts);
+                newSha = localResult.productsSha;
+              } catch (localErr: any) {
+                if (this.isProductionEnvironment()) throw remoteErr;
+                throw localErr;
+              }
             }
-          } else if (this.isProductionEnvironment()) {
-            throw new GitStorageError('STORAGE CONFIGURATION ERROR: GITHUB_TOKEN environment variable is required in production.', 500);
           } else {
             const localResult = await this.commitOrderAndInventoryAtomicLocal(newOrder, updatedProducts);
             newSha = localResult.productsSha;
@@ -1077,16 +1087,11 @@ export class GitStorageService {
             }
           }
           return orders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        } else if (res.status === 404 || res.status === 401) {
-          // No remote orders folder yet on GitHub branch, or unauthorized
-          return [];
         } else {
-          console.warn(`[GitStorage] GitHub API returned HTTP ${res.status} for orders. Returning empty array.`);
-          return [];
+          console.warn(`[GitStorage] Remote orders fetch returned HTTP ${res.status}, checking local orders fallback.`);
         }
       } catch (err: any) {
-        console.warn('[GitStorage] Remote orders fetch failed, returning empty list:', err.message);
-        return [];
+        console.warn('[GitStorage] Remote orders fetch failed, checking local orders fallback:', err.message);
       }
     }
 

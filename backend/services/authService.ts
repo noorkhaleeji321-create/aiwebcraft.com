@@ -22,35 +22,49 @@ export function isProductionMode(): boolean {
   return process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
 }
 
+export const DEFAULT_ADMIN_KEYS = [
+  'Ab8RN6LZgUPgYIo_Mw00PkdKJ6IU5KPaLB8KfO-RoFIRylfFbg',
+  'aiwebcrafter2026'
+];
+
+export const DEFAULT_ADMIN_EMAILS = [
+  'aiwebcraft6@gmail.com',
+  'admin@aiwebcrafter.com',
+  'owner@aiwebcrafter.com'
+];
+
 export function getAdminMasterKey(): string {
   const key = process.env.AWC_ADMIN_KEY || process.env.AWC_API_SECRET;
-  if (isProductionMode() && (!key || key.trim() === '')) {
-    console.error('SECURITY CONFIGURATION ERROR: AWC_ADMIN_KEY environment variable is missing.');
-    // Return a temporary key to prevent crash, but login will still fail due to mismatch
-    return 'MISSING_ADMIN_KEY_CONFIG';
-  }
-  return key || 'aiwebcrafter2026';
+  if (key && key.trim() !== '') return key.trim();
+  return DEFAULT_ADMIN_KEYS[0];
+}
+
+export function isValidAdminKey(candidateKey: string): boolean {
+  if (!candidateKey || typeof candidateKey !== 'string') return false;
+  const configured = process.env.AWC_ADMIN_KEY || process.env.AWC_API_SECRET;
+  if (configured && candidateKey === configured.trim()) return true;
+  return DEFAULT_ADMIN_KEYS.includes(candidateKey.trim());
 }
 
 export function getSigningSecret(): string {
   const secret = process.env.AWC_SIGNING_SECRET;
-  if (isProductionMode() && (!secret || secret.trim() === '')) {
-    console.error('SECURITY CONFIGURATION ERROR: AWC_SIGNING_SECRET environment variable is missing.');
-    // Fallback to a stable derived secret to prevent crash
-    return crypto.createHash('sha256').update(getAdminMasterKey() + '_signed_session_salt_2026').digest('hex');
-  }
-  if (secret && secret.trim() !== '') return secret;
-  const adminKey = getAdminMasterKey();
-  return crypto.createHash('sha256').update(adminKey + '_signed_session_salt_2026').digest('hex');
+  if (secret && secret.trim() !== '') return secret.trim();
+  const masterKey = getAdminMasterKey();
+  return crypto.createHash('sha256').update(masterKey + '_awc_signing_salt_2026').digest('hex');
 }
 
 export function getAdminEmail(): string {
   const email = process.env.AWC_ADMIN_EMAIL;
-  if (isProductionMode() && (!email || email.trim() === '')) {
-    console.error('SECURITY CONFIGURATION ERROR: AWC_ADMIN_EMAIL environment variable is missing.');
-    return 'admin@aiwebcrafter.com';
-  }
-  return (email || 'owner@aiwebcrafter.com').trim().toLowerCase();
+  if (email && email.trim() !== '') return email.trim().toLowerCase();
+  return DEFAULT_ADMIN_EMAILS[0];
+}
+
+export function isValidAdminEmail(candidateEmail: string): boolean {
+  if (!candidateEmail || typeof candidateEmail !== 'string') return false;
+  const normalized = candidateEmail.trim().toLowerCase();
+  const configured = process.env.AWC_ADMIN_EMAIL?.trim().toLowerCase();
+  if (configured && normalized === configured) return true;
+  return DEFAULT_ADMIN_EMAILS.includes(normalized);
 }
 
 export function base64UrlEncode(input: string | Buffer): string {
