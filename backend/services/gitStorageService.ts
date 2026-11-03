@@ -188,7 +188,7 @@ export class GitStorageService {
   private config: GitStorageConfig;
   private mutex = new AsyncMutex();
   private productsCache: CacheEntry<StoredProduct[]> | null = null;
-  private cacheTtlMs = 60 * 1000; // 60 seconds TTL
+  private cacheTtlMs = 2 * 1000; // 2 seconds TTL for instant product sync
   private fetchFn: typeof fetch;
   private lastAuthError: string | null = null;
 

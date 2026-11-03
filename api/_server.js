@@ -83,7 +83,7 @@ var GitStorageService = class {
   constructor(customConfig) {
     this.mutex = new AsyncMutex();
     this.productsCache = null;
-    this.cacheTtlMs = 60 * 1e3;
+    this.cacheTtlMs = 2 * 1e3;
     this.lastAuthError = null;
     this.config = {
       owner: process.env.GITHUB_REPO_OWNER || "noorkhaleeji321-create",
